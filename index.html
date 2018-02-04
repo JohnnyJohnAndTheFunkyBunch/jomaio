@@ -38,6 +38,8 @@
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
 			
+        <!-- This line is for displaying subs number-->
+	    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
    
 		<!-- Google analytics tracking code-->
 	
@@ -163,7 +165,7 @@
 											</a>
 										</td>
 										<td>
-											<h5 class="uppercase" style="font-size: 30px; padding-top: 18px; padding-left: 50px;line-height: 50px;">17.6K Total Reach</h5>
+											<h5 class="uppercase" style="font-size: 30px; padding-top: 18px; padding-left: 50px;line-height: 50px;" id="total_reach"></h5>
 										</td>
 										
 									</tr>
@@ -184,7 +186,7 @@
 											<i class="fab fa-youtube" style="font-size: 70px;"></i>
 										</a>
 									</li>
-                                    <h5 class="uppercase" style="font-size: 30px;">15K</h5>
+                                    <h5 class="uppercase" style="font-size: 30px;" id="yt_reach"></h5>
                                 </div>
                             </div>
                             
@@ -347,6 +349,33 @@
         </div>
 
 
+                <script>
+                    var initialCount;
+                    var resetCount;
+                    httpGet1();
+                    function httpGet1(theData)
+                    {
+                     $.ajax({
+                        type: "GET",
+                        url: "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCV0qA-eDDICsRR9rPcnG7tw&key=AIzaSyAYITnYveJdE2wMxZUNnJihVmWhVSz01zg",
+                        dataType: "jsonp",
+                        success: function(data1){
+                            if(resetCount != true){
+                                var count = parseInt(data1['items'][0]['statistics']['subscriberCount']) - initialCount;
+                            }else if(resetCount == true){
+                                resetCount = false;
+                                initialCount = parseInt(data1['items'][0]['statistics']['subscriberCount']);
+                                stop();
+                                reset();
+                                start();
+                            }
+                        var subs = parseInt(data1['items'][0]['statistics']['subscriberCount']);
+                        $('#yt_reach').html((subs-subs%1000)/1000+'K');
+                        $('#total_reach').html((subs-subs%1000)/1000+2.6+'K Total Reach');
+                        }
+                    });
+                    }
+                </script>
         <script src="./assets/jquery.min.js"></script>
         <script src="./assets/bootstrap.min.js"></script>
         <script src="./assets/flexslider.min.js"></script>
