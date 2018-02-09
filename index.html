@@ -211,7 +211,7 @@
 											<i class="fab fa-instagram icon icon-lg" style="font-size: 70px;"></i>
 										</a>
 									</li>
-                                    <h5 class="uppercase" style="font-size: 30px;">1.9K</h5>
+                                    <h5 class="uppercase" style="font-size: 30px;" id="ig_reach"></h5>
                                 </div>
                             </div>
                             
@@ -393,28 +393,43 @@
                     var initialCount;
                     var resetCount;
                     httpGet1();
-                    function httpGet1(theData)
+                    httpGet2();
+                    httpGet3();
+                    function httpGet1(next)
                     {
                      $.ajax({
                         type: "GET",
                         url: "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCV0qA-eDDICsRR9rPcnG7tw&key=AIzaSyAYITnYveJdE2wMxZUNnJihVmWhVSz01zg",
                         dataType: "jsonp",
                         success: function(data1){
-                            if(resetCount != true){
-                                var count = parseInt(data1['items'][0]['statistics']['subscriberCount']) - initialCount;
-                            }else if(resetCount == true){
-                                resetCount = false;
-                                initialCount = parseInt(data1['items'][0]['statistics']['subscriberCount']);
-                                stop();
-                                reset();
-                                start();
-                            }
-                        var subs = parseInt(data1['items'][0]['statistics']['subscriberCount']);
-                        $('#yt_reach').html((subs-subs%1000)/1000+'K');
-                        $('#total_reach').html((subs-subs%1000)/1000+2.6+'K Total Reach');
+                            var subs = parseInt(data1['items'][0]['statistics']['subscriberCount']);
+                            $('#yt_reach').html((subs-subs%1000)/1000+'K');
+                            $('#total_reach').html((subs-subs%1000)/1000+2.6+'K Total Reach');
                         }
                     });
                     }
+                    function httpGet2(next)
+                    {
+                     $.ajax({
+                        type: "GET",
+                        url: "https://www.instagram.com/jomaoppa/",
+                        success: function(data1){
+                            n = data1.search("Followers")
+                            var ig_subs = parseInt(data1.substring(n-10, n).replace(/[^0-9]/g, ""))
+                            $('#ig_reach').html((ig_subs-ig_subs%100)/1000+'K');
+                            }
+                    });}
+                    function httpGet3(next)
+                    {
+                     $.ajax({
+                        type: "GET",
+                        url: "https://twitter.com/jomaoppa",
+                        success: function(data1){
+                            n = data1.search("Followers")
+                            console.log(data1.substring(n, n+50))
+                            var ig_subs = parseInt(data1.substring(n, n+50).replace(/[^0-9]/g, ""))
+                            }
+                    });}
                 </script>
         <script src="./assets/jquery.min.js"></script>
         <script src="./assets/bootstrap.min.js"></script>
